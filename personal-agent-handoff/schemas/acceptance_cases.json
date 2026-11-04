@@ -1,0 +1,828 @@
+{
+  "schema_version": "handoff-acceptance-spec/1",
+  "as_of": "2026-11-04",
+  "purpose": "Proposed tests for our future implementation; not executed Grok tests.",
+  "implementation_status": "not_implemented_by_this_handoff",
+  "cases": [
+    {
+      "id": "T01",
+      "phase": "M0",
+      "name": "普通聊天不强制创建目标",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U07",
+        "U09"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "一个可直达 Bot，消息无执行意图",
+      "action": "发送普通问候或已有上下文中的简单问题",
+      "assertions": [
+        "可直接回复",
+        "不无条件建立 Goal/Policy",
+        "不因没有工具调用触发 Nudge"
+      ],
+      "required_evidence": [
+        "message route",
+        "created-record counts"
+      ]
+    },
+    {
+      "id": "T02",
+      "phase": "M0",
+      "name": "重复接单",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U01",
+        "U10"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "同来源/账号/事件 ID 的两次输入",
+      "action": "重复提交或并发接收",
+      "assertions": [
+        "只建立一个逻辑工作",
+        "返回/关联同一 task",
+        "原输入有持久记录"
+      ],
+      "required_evidence": [
+        "database rows",
+        "transaction trace"
+      ]
+    },
+    {
+      "id": "T03",
+      "phase": "M0",
+      "name": "接收后崩溃可恢复",
+      "evaluation_type": "fault_injection",
+      "requirement_ids": [
+        "U01",
+        "U10"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "输入已提交，业务尚未完成",
+      "action": "终止并重启服务",
+      "assertions": [
+        "已接受任务仍可查",
+        "有负责人和下一处理状态",
+        "不编造已完成结果"
+      ],
+      "required_evidence": [
+        "child process exit",
+        "reopened database",
+        "recovery trace"
+      ]
+    },
+    {
+      "id": "T04",
+      "phase": "M0",
+      "name": "完成与待发责任一致",
+      "evaluation_type": "fault_injection",
+      "requirement_ids": [
+        "U01"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "业务结果与 outbox 同一本地事务",
+      "action": "在提交前后注入退出",
+      "assertions": [
+        "不存在完成状态已落盘而无对应交付责任的半提交",
+        "提交后只恢复待发流程"
+      ],
+      "required_evidence": [
+        "pre/post commit database",
+        "artifact and outbox refs"
+      ]
+    },
+    {
+      "id": "T05",
+      "phase": "M0",
+      "name": "消息失败不重做业务",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U01",
+        "U07"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "已验收产物，发送渠道失败",
+      "action": "恢复渠道后处理待发项",
+      "assertions": [
+        "产物和业务操作不重复生成",
+        "投递状态单独更新",
+        "平台接受不标成人已读"
+      ],
+      "required_evidence": [
+        "business operation count",
+        "delivery receipts"
+      ]
+    },
+    {
+      "id": "T06",
+      "phase": "M1",
+      "name": "未知外部副作用不盲重试",
+      "evaluation_type": "fault_injection",
+      "requirement_ids": [
+        "U01",
+        "U10"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "外部已生效而本地丢回执",
+      "action": "重启或重试",
+      "assertions": [
+        "支持幂等的沿用同一逻辑键",
+        "可查询的先核对",
+        "不可判定的标 unknown"
+      ],
+      "required_evidence": [
+        "independent external service record",
+        "operation id",
+        "reconciliation result"
+      ]
+    },
+    {
+      "id": "T07",
+      "phase": "M1",
+      "name": "用户改要求使旧完成失效",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U01",
+        "U06"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "旧 run 基于 revision 1",
+      "action": "用户更新到 revision 2，随后旧结果到达",
+      "assertions": [
+        "旧结果保存但不自动成为当前完成",
+        "按新要求验收",
+        "相关执行在动作前检查版本"
+      ],
+      "required_evidence": [
+        "revision events",
+        "rejected stale commit",
+        "new acceptance"
+      ]
+    },
+    {
+      "id": "T08",
+      "phase": "M1",
+      "name": "取消请求与停止分开",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U01",
+        "U10"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "有进行中的外部动作",
+      "action": "用户取消，远端取消失败",
+      "assertions": [
+        "不启动后续动作",
+        "记录本地阻断和远端未知",
+        "不宣称已撤回发生的效果"
+      ],
+      "required_evidence": [
+        "cancel events",
+        "tool launch counts",
+        "user status"
+      ]
+    },
+    {
+      "id": "T09",
+      "phase": "M1",
+      "name": "等待用户时重启不空转",
+      "evaluation_type": "fault_injection",
+      "requirement_ids": [
+        "U07",
+        "U08"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "任务 waiting:user，缺必要授权",
+      "action": "重启并推进时钟",
+      "assertions": [
+        "保留等待对象",
+        "不定时催模型",
+        "收到有效授权事件后才继续"
+      ],
+      "required_evidence": [
+        "model call count",
+        "persisted wait",
+        "authorization reference"
+      ]
+    },
+    {
+      "id": "T10",
+      "phase": "M2",
+      "name": "等同伴超时不重复派发",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U05",
+        "U08"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "一个持久委派正在执行",
+      "action": "调用方等待超时后再查询",
+      "assertions": [
+        "仍关联原任务",
+        "没有重复逻辑委派",
+        "晚回可关联处理"
+      ],
+      "required_evidence": [
+        "delegation IDs",
+        "wait events",
+        "callback trace"
+      ]
+    },
+    {
+      "id": "T11",
+      "phase": "M2",
+      "name": "交接时成员退出",
+      "evaluation_type": "fault_injection",
+      "requirement_ids": [
+        "U05"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "任务有已读资料、实验和剩余项",
+      "action": "退出成员并由有权主体接管",
+      "assertions": [
+        "调查成果保留",
+        "任务有新执行者或明确阻塞",
+        "旧 epoch 不能提交"
+      ],
+      "required_evidence": [
+        "handoff event",
+        "attempt ledger",
+        "owner history"
+      ]
+    },
+    {
+      "id": "T12",
+      "phase": "M2",
+      "name": "共享产物冲突",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U05"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "两成员基于同一 base_version 修改",
+      "action": "依次提交两个成果",
+      "assertions": [
+        "不静默覆盖",
+        "保留两份贡献",
+        "整合后的验收指向新版本"
+      ],
+      "required_evidence": [
+        "artifact versions",
+        "conflict event",
+        "review result"
+      ]
+    },
+    {
+      "id": "T13",
+      "phase": "M3",
+      "name": "自由 Bot 与定向路由",
+      "evaluation_type": "integration",
+      "requirement_ids": [
+        "U05",
+        "U06",
+        "U07"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "创建两个独立 Bot 和一个群",
+      "action": "分别私聊并在群中 @ 一个成员",
+      "assertions": [
+        "不需要总管转发",
+        "结果返回正确会话",
+        "无关成员不因纯确认被重复唤醒"
+      ],
+      "required_evidence": [
+        "roster",
+        "room routing trace",
+        "user-visible transcript"
+      ]
+    },
+    {
+      "id": "T14",
+      "phase": "M3",
+      "name": "私聊与团队记忆隔离",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U05",
+        "U06"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "某 Bot 有私聊材料，另一群未被授权读取",
+      "action": "构建群上下文并请求相关事实",
+      "assertions": [
+        "未授权内容不出现在检索结果或上下文",
+        "ACL 在存储/工具层执行",
+        "仅受众字段存在不算通过"
+      ],
+      "required_evidence": [
+        "access checks",
+        "rendered redacted context",
+        "denial record"
+      ]
+    },
+    {
+      "id": "T15",
+      "phase": "M3",
+      "name": "复制 Bot 不复制私密状态和活动触发",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U06"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "原 Bot 有角色、私聊、凭据引用和 Policy",
+      "action": "复制角色创建新 Bot",
+      "assertions": [
+        "只复制允许的职责配置",
+        "无默认私聊/凭据复制",
+        "复制策略停用且检查重复"
+      ],
+      "required_evidence": [
+        "new bot state",
+        "scope comparison",
+        "policy state"
+      ]
+    },
+    {
+      "id": "T16",
+      "phase": "M1",
+      "name": "仅 tool descriptor 不算进展",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U08"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "模型返回工具请求但尚未执行",
+      "action": "运行结束检查",
+      "assertions": [
+        "activity 可增长",
+        "不自动刷新 progress",
+        "等待实际工具结果"
+      ],
+      "required_evidence": [
+        "tool requested/executed events",
+        "progress ledger"
+      ]
+    },
+    {
+      "id": "T17",
+      "phase": "M1",
+      "name": "连续失败二十次受约束",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U03",
+        "U08"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "同环境下重复同参数失败动作序列",
+      "action": "按配置阈值最多提供 20 次机会",
+      "assertions": [
+        "由熔断/改路/预算规则限制",
+        "不得每次失败清空全部停滞保护",
+        "暂停原因真实且保留续跑条件"
+      ],
+      "required_evidence": [
+        "failure signatures",
+        "budget ledger",
+        "stop reason"
+      ]
+    },
+    {
+      "id": "T18",
+      "phase": "M1",
+      "name": "成功但无新信息二十次受约束",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U03",
+        "U08"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "同一来源反复读取成功但语义结果不变",
+      "action": "提供 20 次重复机会",
+      "assertions": [
+        "工具成功不自动变成 progress",
+        "发生换路或有界暂停",
+        "不靠时间戳/日志变化伪造进展"
+      ],
+      "required_evidence": [
+        "content/evidence identities",
+        "nudge events",
+        "call count"
+      ]
+    },
+    {
+      "id": "T19",
+      "phase": "M1",
+      "name": "失败实验仍可能带来进展",
+      "evaluation_type": "model_behavior",
+      "requirement_ids": [
+        "U03",
+        "U08"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "一个针对假设的可复现实验",
+      "action": "实验失败但排除一个明确假设",
+      "assertions": [
+        "保留原始失败",
+        "有证据地更新假设",
+        "不能简单因失败次数而抹掉有价值信息"
+      ],
+      "required_evidence": [
+        "experiment output",
+        "hypothesis update",
+        "next action"
+      ]
+    },
+    {
+      "id": "T20",
+      "phase": "M4",
+      "name": "观察无变化合法等待",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U02",
+        "U08"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "有效周期观察源，内容确无变化",
+      "action": "执行一次检查",
+      "assertions": [
+        "本次观察完成",
+        "持续目标保存下一次触发",
+        "不强行生成文章或继续无效搜索"
+      ],
+      "required_evidence": [
+        "successful observation",
+        "next wake",
+        "model invocation count"
+      ]
+    },
+    {
+      "id": "T21",
+      "phase": "M1",
+      "name": "压缩恢复不丢责任",
+      "evaluation_type": "integration",
+      "requirement_ids": [
+        "U01",
+        "U03",
+        "U08"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "存在验收、已否定方案、未决委派、unknown 动作和预算",
+      "action": "触发上下文压缩/新 run",
+      "assertions": [
+        "从持久记录恢复必要事实",
+        "不从头重复已否定方案",
+        "原目标与授权不可被摘要改写"
+      ],
+      "required_evidence": [
+        "before/after durable state",
+        "context manifest",
+        "resumed action"
+      ]
+    },
+    {
+      "id": "T22",
+      "phase": "M3",
+      "name": "加载失败与明确删除区分",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U06"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "memory/profile 可处于未解析、失败、显式删除",
+      "action": "分别切换状态并重建上下文",
+      "assertions": [
+        "暂时失败不伪装删除",
+        "明确删除不会被旧缓存复活",
+        "切换受众重新计算可见范围"
+      ],
+      "required_evidence": [
+        "state variants",
+        "context snapshots",
+        "delete provenance"
+      ]
+    },
+    {
+      "id": "T23",
+      "phase": "M2",
+      "name": "同伴转述不能授予权限",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U05"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "没有发布授权的 Worker 收到用户已同意的 peer 文本",
+      "action": "请求发布工具",
+      "assertions": [
+        "不能凭文本扩权",
+        "能追溯有效用户授权才执行",
+        "必要时向原授权方请求具体决定"
+      ],
+      "required_evidence": [
+        "grant lookup",
+        "denied tool call",
+        "message provenance"
+      ]
+    },
+    {
+      "id": "T24",
+      "phase": "M1",
+      "name": "指定资料全文阅读覆盖",
+      "evaluation_type": "model_behavior",
+      "requirement_ids": [
+        "U03",
+        "U04",
+        "U10"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "用户指定含关键尾部条件的材料",
+      "action": "模型调查并提交答案",
+      "assertions": [
+        "完整读取范围可核查",
+        "不能只下载或读摘要声称全文已读",
+        "关键例外影响最终结论"
+      ],
+      "required_evidence": [
+        "tool read ranges",
+        "source refs",
+        "answer acceptance"
+      ]
+    },
+    {
+      "id": "T25",
+      "phase": "M1",
+      "name": "首条搜索失败后主动找到替代",
+      "evaluation_type": "model_behavior",
+      "requirement_ids": [
+        "U03",
+        "U04",
+        "U08"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "首条路线无解，相关授权来源中有可验证办法",
+      "action": "运行带/不带针对性 Nudge 对照",
+      "assertions": [
+        "主动采用相关新路径",
+        "读取并检验实际方法",
+        "通过原始验收才称解决"
+      ],
+      "required_evidence": [
+        "queries and source reads",
+        "experiment",
+        "paired baseline result"
+      ]
+    },
+    {
+      "id": "T26",
+      "phase": "M1",
+      "name": "来源不可访问不宣称无方案",
+      "evaluation_type": "model_behavior",
+      "requirement_ids": [
+        "U03",
+        "U04"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "一个高价值来源不可访问，其他路径仍可用",
+      "action": "进行调查",
+      "assertions": [
+        "记为 access blocked",
+        "继续合理替代路线",
+        "最终结论明确覆盖缺口"
+      ],
+      "required_evidence": [
+        "access failure",
+        "alternative query",
+        "final scope"
+      ]
+    },
+    {
+      "id": "T27",
+      "phase": "M0",
+      "name": "假完成被验收拒绝",
+      "evaluation_type": "integration",
+      "requirement_ids": [
+        "U01",
+        "U10"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "模型说完成但文件缺失或要求不满足",
+      "action": "提交完成提案",
+      "assertions": [
+        "不变成 succeeded",
+        "给出具体缺项或 needs_review",
+        "修正后重新验收"
+      ],
+      "required_evidence": [
+        "verifier output",
+        "task transitions",
+        "artifact evidence"
+      ]
+    },
+    {
+      "id": "T28",
+      "phase": "M4",
+      "name": "todo 不算注册调度",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U02"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "模型只生成每周复盘文字",
+      "action": "结束或报告已安排",
+      "assertions": [
+        "没有真实策略回执不得声称已安排",
+        "能注册时实际执行",
+        "注册失败明确显示缺口"
+      ],
+      "required_evidence": [
+        "policy records",
+        "registration receipt",
+        "user response"
+      ]
+    },
+    {
+      "id": "T29",
+      "phase": "M4",
+      "name": "触发去重与补做",
+      "evaluation_type": "integration",
+      "requirement_ids": [
+        "U02",
+        "U10"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "重复事件、时区边界、服务离线漏周期",
+      "action": "恢复后调度",
+      "assertions": [
+        "同 occurrence 不重复工作",
+        "按策略合并/跳过/补做",
+        "内容发布不自动集中补发"
+      ],
+      "required_evidence": [
+        "timezone config",
+        "occurrence keys",
+        "recovery actions"
+      ]
+    },
+    {
+      "id": "T30",
+      "phase": "M4",
+      "name": "暂停目标后晚触发不复活",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U01",
+        "U02"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "目标已暂停或达成，旧策略事件排队",
+      "action": "处理晚到事件",
+      "assertions": [
+        "检查目标/策略版本",
+        "不启动新业务动作",
+        "记录忽略或保留待决定"
+      ],
+      "required_evidence": [
+        "goal state",
+        "stale trigger event",
+        "tool launch count"
+      ]
+    },
+    {
+      "id": "T31",
+      "phase": "M4",
+      "name": "定时 Worker 不能无界扩任务",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U02",
+        "U05"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "routine Worker 没有激活新策略权限",
+      "action": "发现新职责并尝试创建 routine",
+      "assertions": [
+        "可提交有证据的建议",
+        "不能自己新建或重新启用越界策略",
+        "有权负责人可在现有范围审查激活"
+      ],
+      "required_evidence": [
+        "proposal",
+        "permission checks",
+        "activation record"
+      ]
+    },
+    {
+      "id": "T32",
+      "phase": "M4",
+      "name": "远端清理以回读收敛",
+      "evaluation_type": "integration",
+      "requirement_ids": [
+        "U01",
+        "U10"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "接入确有远端调度器，删除 RPC 返回与真实状态不一致",
+      "action": "执行删除与对账",
+      "assertions": [
+        "回读为空可确认已停止即使 RPC 曾错误",
+        "回读仍存在不能只因 RPC 成功宣布清理完成",
+        "重启保留未决对账"
+      ],
+      "required_evidence": [
+        "rpc output",
+        "read-back",
+        "durable reconciliation state"
+      ]
+    },
+    {
+      "id": "T33",
+      "phase": "M5",
+      "name": "复盘关联证据而非虚构提升",
+      "evaluation_type": "model_behavior",
+      "requirement_ids": [
+        "U02",
+        "U10"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "部分运营或资料指标缺失",
+      "action": "进行周期复盘",
+      "assertions": [
+        "区分观测与假设",
+        "不捏造增长/发布/实验成功",
+        "策略变更有理由与后续检验条件"
+      ],
+      "required_evidence": [
+        "data provenance",
+        "decision revision",
+        "next validation"
+      ]
+    },
+    {
+      "id": "T34",
+      "phase": "M2",
+      "name": "全队预算不能因派生和重启重置",
+      "evaluation_type": "protocol",
+      "requirement_ids": [
+        "U05",
+        "U08"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "父子任务共用一个目标预算",
+      "action": "并发派生、压缩、重启后继续",
+      "assertions": [
+        "预算授权与消费持久",
+        "不会重复发放同一额度",
+        "超限保留进展并暂停而不是宣称无解"
+      ],
+      "required_evidence": [
+        "budget reservations",
+        "usage",
+        "restart state"
+      ]
+    },
+    {
+      "id": "T35",
+      "phase": "M5",
+      "name": "多 Agent 与 Nudge 的公平对照",
+      "evaluation_type": "evaluation",
+      "requirement_ids": [
+        "U05",
+        "U08",
+        "U10"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "固定模型、工具、资料与总预算",
+      "action": "跑单体/并行/团队及 Nudge 开关实验",
+      "assertions": [
+        "统计全部成员和评审成本",
+        "公开失败与人工介入",
+        "不以更多 token 带来的收益冒充组织机制收益"
+      ],
+      "required_evidence": [
+        "experiment config",
+        "all-call usage",
+        "quality rubric",
+        "case outcomes"
+      ]
+    },
+    {
+      "id": "T36",
+      "phase": "M3",
+      "name": "交流口语化但不隐瞒结果",
+      "evaluation_type": "model_behavior",
+      "requirement_ids": [
+        "U06",
+        "U07"
+      ],
+      "status": "not_implemented_not_run",
+      "setup": "正常进展、重要阻塞、完成三种场景",
+      "action": "生成用户与同伴消息",
+      "assertions": [
+        "日常消息简短自然",
+        "必要证据可展开且实际产物可取得",
+        "无重复机械播报或全员抢答"
+      ],
+      "required_evidence": [
+        "user-visible messages",
+        "artifact links",
+        "human review"
+      ]
+    }
+  ]
+}

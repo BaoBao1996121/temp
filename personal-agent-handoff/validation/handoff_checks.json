@@ -1,0 +1,192 @@
+{
+  "checked_at_utc": "2026-11-04T03:18:35.590615+00:00",
+  "scope": "handoff_document_integrity_only",
+  "passed": true,
+  "checks_passed": 17,
+  "checks_total": 17,
+  "checks": [
+    {
+      "name": "source_bytes_R1",
+      "passed": true,
+      "details": {
+        "path": "sources/最简PersonalAgent完整调研与设计取舍.md",
+        "expected_sha256": "bc54dbca61ac98b551468efdb37c72f6774aa8195312c96860df7a8eda5ce5ca"
+      }
+    },
+    {
+      "name": "source_bytes_R2",
+      "passed": true,
+      "details": {
+        "path": "sources/codex_rea_grok_bot_task.md",
+        "expected_sha256": "4a940a8e5ca4e24602680a7746dee1375d8ad73ee1b820df53e2f3bada5c813e"
+      }
+    },
+    {
+      "name": "source_bytes_R3",
+      "passed": true,
+      "details": {
+        "path": "legacy/grok_bot_rea_analysis_20261103.zip",
+        "expected_sha256": "97448bd6b4dd1b3587c00ab65706a5b5aa2d27c5c726e84cb3367e3e0533ed39"
+      }
+    },
+    {
+      "name": "legacy_archive_R3",
+      "passed": true,
+      "details": {
+        "members": 12,
+        "corrupt_member": null
+      }
+    },
+    {
+      "name": "source_bytes_R4",
+      "passed": true,
+      "details": {
+        "path": "legacy/rea_install_attempt_20261103.zip",
+        "expected_sha256": "9364bf9e730a1f7606e63ea72c7592d42b144156546ae93fc5bc093c38f5ecc5"
+      }
+    },
+    {
+      "name": "legacy_archive_R4",
+      "passed": true,
+      "details": {
+        "members": 8,
+        "corrupt_member": null
+      }
+    },
+    {
+      "name": "source_report_in_standalone",
+      "passed": true,
+      "details": "Full source text included; original file also preserved separately."
+    },
+    {
+      "name": "host_digest_consistency",
+      "passed": true,
+      "details": "Reported target digest is distinct from the report file digest; target bytes were not supplied."
+    },
+    {
+      "name": "missing_reports_declared",
+      "passed": true,
+      "details": [
+        "collaboration-historical.md",
+        "long-term-work.md",
+        "muse-report.md",
+        "phase2-delegation.md",
+        "phase2-validation.md",
+        "phase3-host-collaboration.md",
+        "phase3-host-continuation.md",
+        "phase4-validation.md",
+        "phase5-服务端边界与评测运行器深挖.md",
+        "prompts.md",
+        "当前官方Host后端深挖.md",
+        "本机验证状态.md"
+      ]
+    },
+    {
+      "name": "document_links",
+      "passed": true,
+      "details": {
+        "checked": 78,
+        "declared_unavailable_occurrences": 32,
+        "unexpected_broken": []
+      }
+    },
+    {
+      "name": "acceptance_ids_unique",
+      "passed": true,
+      "details": {
+        "count": 36,
+        "ids": [
+          "T01",
+          "T02",
+          "T03",
+          "T04",
+          "T05",
+          "T06",
+          "T07",
+          "T08",
+          "T09",
+          "T10",
+          "T11",
+          "T12",
+          "T13",
+          "T14",
+          "T15",
+          "T16",
+          "T17",
+          "T18",
+          "T19",
+          "T20",
+          "T21",
+          "T22",
+          "T23",
+          "T24",
+          "T25",
+          "T26",
+          "T27",
+          "T28",
+          "T29",
+          "T30",
+          "T31",
+          "T32",
+          "T33",
+          "T34",
+          "T35",
+          "T36"
+        ]
+      }
+    },
+    {
+      "name": "acceptance_not_claimed_run",
+      "passed": true,
+      "details": "All are future specifications, not passed tests."
+    },
+    {
+      "name": "acceptance_complete",
+      "passed": true,
+      "details": "Each case declares setup/action/assertions/evidence."
+    },
+    {
+      "name": "requirements_covered",
+      "passed": true,
+      "details": [
+        "U01",
+        "U02",
+        "U03",
+        "U04",
+        "U05",
+        "U06",
+        "U07",
+        "U08",
+        "U09",
+        "U10"
+      ]
+    },
+    {
+      "name": "no_reverse_engineering_claim_this_handoff",
+      "passed": true,
+      "details": "not_implemented_by_this_handoff; inspect user workspace for any newer code"
+    },
+    {
+      "name": "user_requirements_preserved",
+      "passed": true,
+      "details": "Requirements present in the entry document."
+    },
+    {
+      "name": "package_manifest",
+      "passed": true,
+      "details": {
+        "entries": 17,
+        "mismatched": [],
+        "self_manifest_excluded": true
+      }
+    }
+  ],
+  "rea_executed": false,
+  "local_original_function_tests_rerun": false,
+  "agent_product_tests_executed": false,
+  "limitations": [
+    "Referenced detailed reports and original local evidence were not supplied.",
+    "Source hash validation concerns the uploaded report/archive bytes, not the absent HOST/EVAL targets.",
+    "This validation does not establish any runtime, model, or production behavior."
+  ]
+}

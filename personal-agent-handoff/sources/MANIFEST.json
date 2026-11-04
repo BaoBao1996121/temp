@@ -1,0 +1,158 @@
+{
+  "document_date": "2026-11-04",
+  "handoff_version": "2026-11-04-handoff",
+  "sources": [
+    {
+      "id": "R1",
+      "path": "sources/最简PersonalAgent完整调研与设计取舍.md",
+      "type": "user_uploaded_report",
+      "bytes": 26196,
+      "sha256": "bc54dbca61ac98b551468efdb37c72f6774aa8195312c96860df7a8eda5ce5ca",
+      "read_coverage": "full_text",
+      "boundary": "Read completely; reported local experiments not independently rerun in this handoff."
+    },
+    {
+      "id": "R2",
+      "path": "sources/codex_rea_grok_bot_task.md",
+      "type": "prior_research_task",
+      "bytes": 17997,
+      "sha256": "4a940a8e5ca4e24602680a7746dee1375d8ad73ee1b820df53e2f3bada5c813e",
+      "read_coverage": "full_text",
+      "boundary": "Task instructions, not completion evidence; old research-only scope does not govern the new implementation stage."
+    },
+    {
+      "id": "R3",
+      "path": "legacy/grok_bot_rea_analysis_20261103.zip",
+      "type": "historical_analysis_archive",
+      "bytes": 20633,
+      "sha256": "97448bd6b4dd1b3587c00ab65706a5b5aa2d27c5c726e84cb3367e3e0533ed39",
+      "read_coverage": "all_archive_text_members",
+      "boundary": "All 12 text members read; source target absent; 6 prior isolation results not rerun or merged with local phase counts."
+    },
+    {
+      "id": "R4",
+      "path": "legacy/rea_install_attempt_20261103.zip",
+      "type": "historical_install_attempt",
+      "bytes": 7519,
+      "sha256": "9364bf9e730a1f7606e63ea72c7592d42b144156546ae93fc5bc093c38f5ecc5",
+      "read_coverage": "all_archive_text_members",
+      "boundary": "Old ChatGPT container installation failure; does not describe current user-local REA status."
+    }
+  ],
+  "conversation_context": {
+    "id": "C1",
+    "included_as": "CLAUDE_HANDOFF.md U01-U10 and design decision record",
+    "scope": "User requirements in the current conversation; not a verbatim chat export."
+  },
+  "referenced_reports_not_supplied": [
+    {
+      "name": "collaboration-historical.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "phase2-delegation.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "phase3-host-collaboration.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "prompts.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "phase3-host-continuation.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "当前官方Host后端深挖.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "phase4-validation.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "phase2-validation.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "long-term-work.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "muse-report.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "本机验证状态.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    },
+    {
+      "name": "phase5-服务端边界与评测运行器深挖.md",
+      "status": "referenced_not_supplied",
+      "expected_source": "User local research workspace; exact location must be inspected"
+    }
+  ],
+  "raw_materials_not_supplied": [
+    "Official G078 desktop/ASAR",
+    "HOST 2b353c7 bundle",
+    "sand-eval-runner.cjs",
+    "REA Evidence outputs",
+    "Local phases 1-5 test scripts and raw logs",
+    "Current production model requests and server implementation"
+  ],
+  "reported_local_environment": {
+    "source_id": "R1",
+    "rea_version": "6.8.0",
+    "node_version": "26.13.0",
+    "independently_checked_this_handoff": false
+  },
+  "reported_host_sha256": "328b715bed51ac13f549319f84af259b80936cd984e161af4c45a0faad0f1c35",
+  "reported_test_counts_by_scope": [
+    {
+      "scope": "local phases 1-2",
+      "count": 105
+    },
+    {
+      "scope": "local phase 3 HOST",
+      "count": 40
+    },
+    {
+      "scope": "local phase 4 HOST",
+      "count": 25
+    },
+    {
+      "scope": "local phase 5 HOST",
+      "count": 22
+    },
+    {
+      "scope": "local phase 5 EVAL",
+      "count": 18
+    },
+    {
+      "scope": "real remote model experiments",
+      "count": 0
+    }
+  ],
+  "count_warning": "Counts copied from R1, not asserted to be unique across phases or real production tests. No local phase test was rerun during this handoff.",
+  "reported_local_workspace": "C:\\Users\\asus\\Documents\\Codex\\2026-11-03\\github-rea-grok-bot-muse-personal",
+  "reported_research_root": "work/research/grok-bot-rea",
+  "phase4_command_source": "R1 section 10; inspect actual script before executing",
+  "phase5_reproduction_command": "not supplied in summary; locate in the actual phase5 report, do not invent",
+  "framework_implementation_status": "not_implemented_by_this_handoff; inspect user workspace for any newer code",
+  "reverse_engineering_executed_this_handoff": false,
+  "public_release_status": "private handoff; redact local paths and review licenses before public release"
+}
